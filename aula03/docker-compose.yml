@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  postgress:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - "internal"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+
+  admin:
+    image: adminer
+    restart: always
+    links:
+      - "postgress:db"
+    ports:
+      - 8083:8080
+    networks:
+      - "internal"
+
+networks:
+  internal:
+    name: wordpress-net
+    driver: overlay
+    ipam:
+      config:
+        - subnet: "10.200.254.0/24"
+
+volumes:
+  pgdata:
+    name: "wordpress-data"
+    driver: local
+    external: false
