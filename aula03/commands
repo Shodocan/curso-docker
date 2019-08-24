@@ -1,0 +1,18 @@
+link
+
+docker run -d --name postgres-link -e POSTGRES_PASSWORD=teste postgres
+
+docker run -d -p 8080:8080 --link postgres-link:curso-docker-db adminer
+
+
+network
+
+docker network create curso-docker
+
+docker run -d --name postgres-network --network curso-docker -e POSTGRES_PASSWORD=teste postgres
+docker run -d -p 8080:8080 --network curso-docker adminer
+
+
+volume
+
+docker run -v volume-postgres:/var/lib/postgresql/data postgres
